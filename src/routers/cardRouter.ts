@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { activate, balance, block, card, unlock } from "../controllers/cardController.js";
+import { activate, balance, block, card, create, unlock } from "../controllers/cardController.js";
 
 const cardRouter = Router()
 
-cardRouter.post("/create", card)
+cardRouter.post("/create:key", create)
 cardRouter.post("/activate", activate)
 cardRouter.get("/card", card)
 cardRouter.get("/balance", balance)
