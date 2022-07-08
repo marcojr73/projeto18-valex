@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { connection } from "../config/database.js";
 
 import * as middlewares from "../middlewares/cardMiddleware.js"
 import * as services from "../services/cardServices.js"
@@ -10,7 +9,7 @@ async function create(req: Request, res: Response){
 //[x] devo receber o tipo de cartão
 //[x] devo validar se o tipo de cartão esta correto
 //[x] devo validar se a chave pertence a uma empresa registrada
-// devo validar se o funcionário existe
+//[x]devo validar se o funcionário existe
 // devo formatar o nome do funcionário
 // a data de expiração deve ser para daq a 5 anos
 // devo gerar um cvc para o cartão
@@ -21,6 +20,8 @@ async function create(req: Request, res: Response){
 
     await middlewares.validateType(typeCard)
     await services.validateKey(keyCompany)
+    await services.validateEmployee(employeeId)
+    await services.validateUniqueCard(typeCard, employeeId)
 
     res.send("bala azul")
 

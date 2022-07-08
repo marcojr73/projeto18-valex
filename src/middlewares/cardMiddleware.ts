@@ -3,7 +3,7 @@ async function validateType(typeCard){
                 typeCard === 'transport'|| typeCard === 'education'|| typeCard === 'health'
 
     if(!ans) throw {
-        status: 422,
+        status: 400,
         message: "You not sent a valid card type"
     }
 }
