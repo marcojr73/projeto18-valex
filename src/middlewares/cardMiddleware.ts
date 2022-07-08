@@ -1,4 +1,4 @@
-async function validateType(typeCard: String){
+async function validateType(typeCard){
     const ans = typeCard === 'groceries' || typeCard === 'restaurants'||
                 typeCard === 'transport'|| typeCard === 'education'|| typeCard === 'health'
 
