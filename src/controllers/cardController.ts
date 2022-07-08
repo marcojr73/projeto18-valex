@@ -10,7 +10,8 @@ async function create(req: Request, res: Response){
 //[x] devo validar se o tipo de cartão esta correto
 //[x] devo validar se a chave pertence a uma empresa registrada
 //[x]devo validar se o funcionário existe
-// devo formatar o nome do funcionário
+//[x]devo gerar e armazenar o numero do cartão
+//[] devo formatar o nome do funcionário
 // a data de expiração deve ser para daq a 5 anos
 // devo gerar um cvc para o cartão
 // devo criptografar a cvc do cartão para armazena-la
@@ -20,8 +21,13 @@ async function create(req: Request, res: Response){
 
     await middlewares.validateType(typeCard)
     await services.validateKey(keyCompany)
-    await services.validateEmployee(employeeId)
+    const fullName = await services.validateEmployee(employeeId)
     await services.validateUniqueCard(typeCard, employeeId)
+    const number: number = await services.generateNumberCard()
+    const cardholderName = await services.formatNameCard(fullName)
+
+    console.log(cardholderName)
+
 
     res.send("bala azul")
 
