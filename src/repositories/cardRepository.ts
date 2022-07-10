@@ -115,13 +115,13 @@ export async function update(id: number, passCrypt: string) {
   );
 }
 
-export async function block(id) {
+export async function block(id, aux) {
   connection.query(
     `UPDATE cards
     SET 
-    "isBlocked" = true
-    WHERE id=$1
-  `,[id])
+    "isBlocked"=$1
+    WHERE id=$2
+  `,[aux, id])
 }
 
 export async function remove(id: number) {

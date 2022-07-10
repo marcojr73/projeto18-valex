@@ -7,7 +7,7 @@ cardRouter.post("/create", create)
 cardRouter.post("/activate", activate)
 cardRouter.get("/card", card)
 cardRouter.get("/balance/:id", balance)
-cardRouter.post("/block", block)
-cardRouter.post("/unlock", unlock)
+cardRouter.put("/block", block)
+cardRouter.put("/unlock", unlock)
 
 export default cardRouter

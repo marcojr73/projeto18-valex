@@ -19,7 +19,7 @@ async function create(req: Request, res: Response){
     const cardholderName = await servicesCreate.formatNameCard(fullName)
     const expirationDate = await servicesCreate.generatecardExpiration()
     const securityCode = await servicesCreate.generateSecurityCode()
-    await servicesCreate.insertCardData(employeeId,number,cardholderName,securityCode, expirationDate, type)
+    await servicesCreate.insertCardData(employeeId, number, cardholderName, securityCode, expirationDate, type)
 
     res.status(201).send("Card create successful")
 
@@ -57,16 +57,26 @@ async function balance(req: Request, res: Response){
 
 async function block(req: Request, res: Response){
     const {id, password}: {id: number, password: string} = req.body
+    const aux = true
+    
     const card = await servicesActivate.verifyCard(id)
-    servicesLockUnlock.validateBlocked(card)
+    servicesLockUnlock.validateBlocked(card, aux)
     servicesLockUnlock.validatePass(card.password, password)
-    await servicesLockUnlock.blockCard(id)
+    await servicesLockUnlock.blockCard(id, aux)
 
-    res.status(204).send("card bloecked sucessfull")
+    res.status(204).send("card blocked sucessfull")
 }
 
 async function unlock(req: Request, res: Response){
-    
+    const {id, password}: {id: number, password: string} = req.body
+    const aux = false
+
+    const card = await servicesActivate.verifyCard(id)
+    servicesLockUnlock.validateBlocked(card, aux)
+    servicesLockUnlock.validatePass(card.password, password)
+    await servicesLockUnlock.blockCard(id, aux)
+
+    res.status(204).send("card unlocked sucessfull")
 }
 
 export {

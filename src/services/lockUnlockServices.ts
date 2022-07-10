@@ -12,17 +12,21 @@ function validatePass(passCrypt, password){
     }
 }
 
-function validateBlocked(card){
-    if(card.isBlocked){
+function validateBlocked(card, aux){
+    let message = "this card is already unlocked"
+    if(aux){
+        message = "this card is already blocked"
+    }
+    if(card.isBlocked === aux || card.password === null){
         throw {
             status: 422,
-            message: "this card is already blocked"
+            message,
         }
     }
 }
 
-async function blockCard(id){
-    await repositoriesCard.block(id)
+async function blockCard(id, aux){
+    await repositoriesCard.block(id, aux)
 }
 
 export {

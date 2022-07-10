@@ -60,6 +60,7 @@ async function generatecardExpiration(){
 async function generateSecurityCode(){
     const cryptr = new Cryptr('myTotallySecretKey');
     const cvc = faker.finance.creditCardCVV();
+    console.log(cvc)
     return cryptr.encrypt(cvc);
 }
 
