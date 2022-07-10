@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import Cryptr from 'cryptr';
 
 import * as companyRepository from "../repositories/companyRepository.js"
 import * as employeeRepository from "../repositories/employeeRepository.js"
@@ -35,7 +36,7 @@ async function validateUniqueCard(typeCard, employeeId){
 }
 
 async function generateNumberCard(){
-    return faker.datatype.number({ min: 1000000000000000, max: 9999999999999999, precision: 1 })
+    return faker.finance.creditCardNumber()
 }
 
 async function formatNameCard(fullName){
@@ -57,6 +58,9 @@ async function generatecardExpiration(){
 }
 
 async function generateSecurityCode(){
+    const cryptr = new Cryptr('myTotallySecretKey');
+    const CVC = faker.finance.creditCardCVV();
+    return cryptr.encrypt(CVC);
 
 }
 

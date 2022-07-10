@@ -23,10 +23,11 @@ async function create(req: Request, res: Response){
     await services.validateKey(apiKey)
     const fullName = await services.validateEmployee(employeeId)
     await services.validateUniqueCard(typeCard, employeeId)
-    const number: number = await services.generateNumberCard()
+    const number = await services.generateNumberCard()
     const cardholderName = await services.formatNameCard(fullName)
     const expirationDate = await services.generatecardExpiration()
     const securityCode = await services.generateSecurityCode()
+    console.log(number)
 
 
     res.send("bala azul")
