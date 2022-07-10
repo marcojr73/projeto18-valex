@@ -4,6 +4,7 @@ import * as middlewares from "../middlewares/cardMiddleware.js"
 import * as servicesCreate from "../services/createCardServices.js"
 import * as servicesActivate from "../services/activateCardServices.js"
 import * as servicesBalance from "../services/balanceCardService.js"
+import * as servicesLockUnlock from "../services/lockUnlockServices.js"
 
 async function create(req: Request, res: Response){
 
@@ -29,7 +30,7 @@ async function activate(req: Request, res: Response){
     
     const validateData = await middlewares.validateDataCard(id, cvc, password)
     const card = await servicesActivate.verifyCard(id)
-    const securityCode = await servicesActivate.validateDateExpiration(card)
+    const securityCode = await servicesActivate.validateStatus(card)
     servicesActivate.validateCvc(securityCode, cvc)
     const passCrypt = await servicesActivate.encryptPassword(password)
     await servicesActivate.insertData(id, passCrypt)
@@ -48,14 +49,19 @@ async function card(req: Request, res: Response){
 async function balance(req: Request, res: Response){
     const {id} = (req.params)
     
-    const card = await servicesActivate.verifyCard(id)
+    await servicesActivate.verifyCard(id)
     const balance = await servicesBalance.findCards(id)
     
     res.status(200).send(balance)
 }
 
 async function block(req: Request, res: Response){
+    const {id, password}: {id: number, password: string} = req.body
+    const card = await servicesActivate.verifyCard(id)
+    servicesLockUnlock.validateBlocked(card)
+    servicesLockUnlock.validatePass(card.password, password)
     
+    res.send("bala azul")
 }
 
 async function unlock(req: Request, res: Response){

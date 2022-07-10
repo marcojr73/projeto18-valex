@@ -15,8 +15,8 @@ async function verifyCard(id){
     return ans
 }
 
-function validateDateExpiration(ans){
-    if(ans.password === null || !ans.isBlocked){
+function validateStatus(ans){
+    if(ans.password !== null || !ans.isBlocked){
         throw {
             status: 422,
             message: "this card is already active"
@@ -47,7 +47,7 @@ async function insertData(id: number, passCrypt: string){
 
 export {
     verifyCard,
-    validateDateExpiration,
+    validateStatus,
     validateCvc,
     encryptPassword,
     insertData
