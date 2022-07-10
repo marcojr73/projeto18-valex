@@ -11,22 +11,22 @@ async function create(req: Request, res: Response){
 //[x] devo validar se a chave pertence a uma empresa registrada
 //[x]devo validar se o funcionário existe
 //[x]devo gerar e armazenar o numero do cartão
-//[] devo formatar o nome do funcionário
+//[x] devo formatar o nome do funcionário
 // a data de expiração deve ser para daq a 5 anos
 // devo gerar um cvc para o cartão
 // devo criptografar a cvc do cartão para armazena-la
 
-    const keyCompany: String = req.params.key
+    const apiKey = req.headers.apikey
     const {employeeId, typeCard}: {employeeId: Number, typeCard: String} = req.body
 
     await middlewares.validateType(typeCard)
-    await services.validateKey(keyCompany)
+    await services.validateKey(apiKey)
     const fullName = await services.validateEmployee(employeeId)
     await services.validateUniqueCard(typeCard, employeeId)
     const number: number = await services.generateNumberCard()
     const cardholderName = await services.formatNameCard(fullName)
-
-    console.log(cardholderName)
+    const expirationDate = await services.generatecardExpiration()
+    const securityCode = await services.generateSecurityCode()
 
 
     res.send("bala azul")

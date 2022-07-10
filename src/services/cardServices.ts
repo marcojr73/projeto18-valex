@@ -3,6 +3,7 @@ import { faker } from '@faker-js/faker';
 import * as companyRepository from "../repositories/companyRepository.js"
 import * as employeeRepository from "../repositories/employeeRepository.js"
 import * as cardRepository from "../repositories/cardRepository.js"
+import dayjs from 'dayjs';
 
 async function validateKey(keyCompany){
     const ans = await companyRepository.findByApiKey(keyCompany)
@@ -51,10 +52,20 @@ async function formatNameCard(fullName){
     return ans.join(" ").toUpperCase()
 }
 
+async function generatecardExpiration(){
+    return dayjs().add(5, 'years').format('MM/YY')
+}
+
+async function generateSecurityCode(){
+
+}
+
 export {
     validateKey,
     validateEmployee,
     validateUniqueCard,
     generateNumberCard,
-    formatNameCard
+    formatNameCard,
+    generatecardExpiration,
+    generateSecurityCode
 }

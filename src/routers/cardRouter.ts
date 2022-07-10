@@ -3,7 +3,7 @@ import { activate, balance, block, card, create, unlock } from "../controllers/c
 
 const cardRouter = Router()
 
-cardRouter.post("/create:key", create)
+cardRouter.post("/create", create)
 cardRouter.post("/activate", activate)
 cardRouter.get("/card", card)
 cardRouter.get("/balance", balance)
