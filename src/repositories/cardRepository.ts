@@ -103,7 +103,6 @@ export async function insert(cardData: CardInsertData) {
 }
 
 export async function update(id: number, passCrypt: string) {
-  console.log(passCrypt)
   connection.query(
     `
     UPDATE cards
@@ -114,6 +113,15 @@ export async function update(id: number, passCrypt: string) {
   `,
     [passCrypt, id]
   );
+}
+
+export async function block(id) {
+  connection.query(
+    `UPDATE cards
+    SET 
+    "isBlocked" = true
+    WHERE id=$1
+  `,[id])
 }
 
 export async function remove(id: number) {

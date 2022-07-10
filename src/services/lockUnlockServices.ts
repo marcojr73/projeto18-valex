@@ -1,4 +1,5 @@
 import Cryptr from "cryptr"
+import * as repositoriesCard from "../repositories/cardRepository.js"
 
 function validatePass(passCrypt, password){
     const cryptr = new Cryptr('myTotallySecretKey')
@@ -20,7 +21,12 @@ function validateBlocked(card){
     }
 }
 
+async function blockCard(id){
+    await repositoriesCard.block(id)
+}
+
 export {
     validatePass,
-    validateBlocked
+    validateBlocked,
+    blockCard
 }

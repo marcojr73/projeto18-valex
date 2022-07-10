@@ -60,8 +60,9 @@ async function block(req: Request, res: Response){
     const card = await servicesActivate.verifyCard(id)
     servicesLockUnlock.validateBlocked(card)
     servicesLockUnlock.validatePass(card.password, password)
-    
-    res.send("bala azul")
+    await servicesLockUnlock.blockCard(id)
+
+    res.status(204).send("card bloecked sucessfull")
 }
 
 async function unlock(req: Request, res: Response){
