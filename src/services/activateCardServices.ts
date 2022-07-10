@@ -8,8 +8,8 @@ async function verifyCard(id: number){
     const ans = await repositories.findById(id)
     if(!ans){
         throw {
-            status: 422,
-            message: "this card is already active"
+            status: 404,
+            message: "this card not exist"
         }
     }
     const dateValidation = validateDateExpiration(ans.expirationDate)
@@ -27,7 +27,7 @@ function validateDateExpiration(expiration){
 }
 
 function validateCvc(securityCode, cvc){
-    const cryptr = new Cryptr('myTotallySecretKey');
+    const cryptr = new Cryptr('myTotallySecretKey')
     const ans = cryptr.decrypt(securityCode)
     if(ans !== cvc) {
         throw {
@@ -37,7 +37,20 @@ function validateCvc(securityCode, cvc){
     }
 }
 
+function encryptPassword(password){
+    const cryptr = new Cryptr('myTotallySecretKey')
+    return cryptr.encrypt(password)
+}
+
+async function insertData(id, passCrypt){
+    const ans = await repositories.update(id, passCrypt)
+    // console.log(ans)
+
+}
+
 export {
     verifyCard,
-    validateCvc
+    validateCvc,
+    encryptPassword,
+    insertData
 }

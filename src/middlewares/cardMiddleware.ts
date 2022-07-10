@@ -11,11 +11,7 @@ async function validateType(typeCard){
 }
 
 async function validateDataCard(id: number, cvc: string, password: string){
-    const ans = await dataActivateCard.validateAsync({id, cvc, password})
-    if(!ans) throw {
-        status: 422,
-        message: "you did not send correct data"
-    }
+    await dataActivateCard.validateAsync({id, cvc, password})
 }
 
 export {

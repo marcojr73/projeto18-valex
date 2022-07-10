@@ -59,8 +59,8 @@ async function generatecardExpiration(){
 
 async function generateSecurityCode(){
     const cryptr = new Cryptr('myTotallySecretKey');
-    const CVC = faker.finance.creditCardCVV();
-    return cryptr.encrypt(CVC);
+    const cvc = faker.finance.creditCardCVV();
+    return cryptr.encrypt(cvc);
 }
 
 async function insertCardData(employeeId, number, cardholderName, securityCode, expirationDate, type){
@@ -97,3 +97,4 @@ export {
     generateSecurityCode,
     insertCardData
 }
+// 891

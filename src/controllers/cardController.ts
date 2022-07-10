@@ -39,18 +39,18 @@ async function activate(req: Request, res: Response){
 //[x] devo receber o cvc do cartão
 //[x] devo receber uma senha de 4 digitos para o cartão
 //[x] devo validar se o cartão existe, ainda não esta ativado e não expirado
-// devo validar se o cvc esta correto
-// devo criptografar e armazenar a senha
+//[x] devo validar se o cvc esta correto
+//[x] devo criptografar e armazenar a senha
 
     const {id, cvc, password}: {id:number, cvc: string, password: string}  = req.body
     
     const validateData = await middlewares.validateDataCard(id, cvc, password)
     const securityCode = await servicesActivate.verifyCard(id)
-    await servicesActivate.validateCvc(securityCode, cvc)
+    servicesActivate.validateCvc(securityCode, cvc)
+    const passCrypt = await servicesActivate.encryptPassword(password)
+    await servicesActivate.insertData(id, passCrypt)
 
-    
-
-    res.send("bala azul")
+    res.status(200).send("activate card sucessfull")
 
 }
 
