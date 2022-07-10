@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 
 import * as middlewares from "../middlewares/cardMiddleware.js"
-import * as services from "../services/createCardServices.js"
+import * as servicesCreate from "../services/createCardServices.js"
+import * as servicesActivate from "../services/activateCardServices.js"
 
 async function create(req: Request, res: Response){
 //[x] devo receber o identificador do funcionário
@@ -20,26 +21,37 @@ async function create(req: Request, res: Response){
     const {employeeId, type}: {employeeId: Number, type: String} = req.body
     
     await middlewares.validateType(type)
-    await services.validateKey(apiKey)
-    const fullName = await services.validateEmployee(employeeId)
-    await services.validateUniqueCard(type, employeeId)
-    const number = await services.generateNumberCard()
-    const cardholderName = await services.formatNameCard(fullName)
-    const expirationDate = await services.generatecardExpiration()
-    const securityCode = await services.generateSecurityCode()
-    await services.insertCardData(employeeId,number,cardholderName,securityCode, expirationDate, type)
+    await servicesCreate.validateKey(apiKey)
+    const fullName = await servicesCreate.validateEmployee(employeeId)
+    await servicesCreate.validateUniqueCard(type, employeeId)
+    const number = await servicesCreate.generateNumberCard()
+    const cardholderName = await servicesCreate.formatNameCard(fullName)
+    const expirationDate = await servicesCreate.generatecardExpiration()
+    const securityCode = await servicesCreate.generateSecurityCode()
+    await servicesCreate.insertCardData(employeeId,number,cardholderName,securityCode, expirationDate, type)
 
     res.status(201).send("Card create successful")
 
 }
 
 async function activate(req: Request, res: Response){
-// devo receber o identificador do cartão
-// devo receber o cvc do cartão
-// devo receber uma senha de 4 digitos para o cartão
-// devo validar se o cartão existe, ainda não esta ativado e não expirados
+//[x] devo receber o identificador do cartão
+//[x] devo receber o cvc do cartão
+//[x] devo receber uma senha de 4 digitos para o cartão
+//[x] devo validar se o cartão existe, ainda não esta ativado e não expirado
 // devo validar se o cvc esta correto
 // devo criptografar e armazenar a senha
+
+    const {id, cvc, password}: {id:number, cvc: string, password: string}  = req.body
+    
+    const validateData = await middlewares.validateDataCard(id, cvc, password)
+    const securityCode = await servicesActivate.verifyCard(id)
+    await servicesActivate.validateCvc(securityCode, cvc)
+
+    
+
+    res.send("bala azul")
+
 }
 
 async function card(req: Request, res: Response){
