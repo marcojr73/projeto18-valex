@@ -61,7 +61,30 @@ async function generateSecurityCode(){
     const cryptr = new Cryptr('myTotallySecretKey');
     const CVC = faker.finance.creditCardCVV();
     return cryptr.encrypt(CVC);
+}
 
+async function insertCardData(employeeId, number, cardholderName, securityCode, expirationDate, type){
+    const password =  null
+    const isVirtual = false
+    const isBlocked = true
+    const originalCardId = null
+    const cardData = {
+        employeeId,
+        number,
+        cardholderName,
+        securityCode, 
+        expirationDate,
+        type, 
+        password,
+        isVirtual,
+        isBlocked,
+        originalCardId
+    }
+    const ans = await cardRepository.insert(cardData)
+    if(ans.rowCount !== 1) throw{
+        status: 400,
+        message: "There was an error insert the data"
+    }
 }
 
 export {
@@ -71,5 +94,6 @@ export {
     generateNumberCard,
     formatNameCard,
     generatecardExpiration,
-    generateSecurityCode
+    generateSecurityCode,
+    insertCardData
 }

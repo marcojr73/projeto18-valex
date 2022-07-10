@@ -1,5 +1,5 @@
 async function validateType(typeCard){
-    const ans = typeCard === 'groceries' || typeCard === 'restaurants'||
+    const ans = typeCard === 'groceries' || typeCard === 'restaurant'||
                 typeCard === 'transport'|| typeCard === 'education'|| typeCard === 'health'
 
     if(!ans) throw {
