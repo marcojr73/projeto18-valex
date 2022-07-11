@@ -1,21 +1,24 @@
 import * as servicesCreate from "../services/createCardServices.js"
 import * as middlewareCard from "../middlewares/cardMiddleware.js"
 import * as servicesActivate from "../services/activateCardServices.js"
+import * as servicesReload from "../services/reloadService.js"
 
 import { Request, Response } from "express";
 
 
 async function reloadCard(req: Request, res: Response){
     const apiKey = req.headers.apikey
-    const {id, value} = req.body
-    const aux = true
+    const {id, value}: {id: number, value: number} = req.body
+    const aux: boolean = true
 
-    await servicesCreate.validateKey(apiKey)
-    await middlewareCard.validateValue(id, value)
+    servicesCreate.validateKey(apiKey)
+    middlewareCard.validateValue(id, value)
     const card = await servicesActivate.verifyCard(id)
     await servicesActivate.validateStatus(card, aux)
-    res.send("bala azul")
+    servicesActivate.validateCardExpiration(card.expirationDate)
+    await servicesReload.reloadCard(id, value)
 
+    res.status(200).send("recharge performed sucessfull")
 }
 
 export {

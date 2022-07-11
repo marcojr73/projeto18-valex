@@ -15,6 +15,20 @@ async function verifyCard(id){
     return ans
 }
 
+function validateCardExpiration(expiration){
+    const monthExpiration = parseInt(expiration.split("/")[0])
+    const yearExpiration = parseInt(expiration.split("/")[1])
+    const monthCurrently = parseInt(dayjs().format("MM"))
+    const yearCurrently = parseInt(dayjs().format("YY"))
+
+    if(yearCurrently > yearExpiration || yearCurrently === yearExpiration && monthCurrently > monthExpiration){
+        throw {
+            status: 422,
+            message: "This card expired"
+        }
+    }
+}
+
 function validateStatus(ans, aux){
     if(aux) {
         if(ans.password === null || ans.isBlocked){
@@ -56,6 +70,7 @@ async function insertData(id: number, passCrypt: string){
 
 export {
     verifyCard,
+    validateCardExpiration,
     validateStatus,
     validateCvc,
     encryptPassword,

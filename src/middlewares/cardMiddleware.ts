@@ -1,4 +1,5 @@
 import * as schemas from "../schemas/schemas.js"
+import Joi, { isError } from "joi";
 
 async function validateType(typeCard){
     const ans = typeCard === 'groceries' || typeCard === 'restaurant'||
@@ -14,12 +15,17 @@ async function validateDataCard(id: number, cvc: string, password: string){
     await schemas.dataActivateCard.validateAsync({id, cvc, password})
 }
 
-async function validateValue(id, value){
+async function validateValue(id: number, value: number){
     await schemas.valueCard.validateAsync({id, value})
+}
+
+async function validateDataPurchase(cardId, password, businessId, amount){
+    await schemas.dataPurchase.validateAsync({cardId, password, businessId, amount})
 }
 
 export {
     validateType,
     validateDataCard,
-    validateValue
+    validateValue,
+    validateDataPurchase
 }

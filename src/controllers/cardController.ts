@@ -31,9 +31,10 @@ async function activate(req: Request, res: Response){
     
     const validateData = await middlewares.validateDataCard(id, cvc, password)
     const card = await servicesActivate.verifyCard(id)
+    servicesActivate.validateCardExpiration(card.expirationDate)
     const securityCode = await servicesActivate.validateStatus(card, aux)
     servicesActivate.validateCvc(securityCode, cvc)
-    const passCrypt = await servicesActivate.encryptPassword(password)
+    const passCrypt = servicesActivate.encryptPassword(password)
     await servicesActivate.insertData(id, passCrypt)
 
     res.status(200).send("activate card sucessfull")
