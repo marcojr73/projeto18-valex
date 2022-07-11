@@ -27,10 +27,11 @@ async function create(req: Request, res: Response){
 
 async function activate(req: Request, res: Response){
     const {id, cvc, password}: {id:number, cvc: string, password: string}  = req.body
+    const aux = false
     
     const validateData = await middlewares.validateDataCard(id, cvc, password)
     const card = await servicesActivate.verifyCard(id)
-    const securityCode = await servicesActivate.validateStatus(card)
+    const securityCode = await servicesActivate.validateStatus(card, aux)
     servicesActivate.validateCvc(securityCode, cvc)
     const passCrypt = await servicesActivate.encryptPassword(password)
     await servicesActivate.insertData(id, passCrypt)

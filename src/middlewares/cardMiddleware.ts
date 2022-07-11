@@ -1,4 +1,4 @@
-import dataActivateCard from "../schemas/schemas.js"
+import * as schemas from "../schemas/schemas.js"
 
 async function validateType(typeCard){
     const ans = typeCard === 'groceries' || typeCard === 'restaurant'||
@@ -11,10 +11,15 @@ async function validateType(typeCard){
 }
 
 async function validateDataCard(id: number, cvc: string, password: string){
-    await dataActivateCard.validateAsync({id, cvc, password})
+    await schemas.dataActivateCard.validateAsync({id, cvc, password})
+}
+
+async function validateValue(id, value){
+    await schemas.valueCard.validateAsync({id, value})
 }
 
 export {
     validateType,
-    validateDataCard
+    validateDataCard,
+    validateValue
 }

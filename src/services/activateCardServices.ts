@@ -15,7 +15,16 @@ async function verifyCard(id){
     return ans
 }
 
-function validateStatus(ans){
+function validateStatus(ans, aux){
+    if(aux) {
+        if(ans.password === null || ans.isBlocked){
+            throw {
+                status: 422,
+                message: "this card is not active"        
+            }
+        }
+        return
+    }
     if(ans.password !== null || !ans.isBlocked){
         throw {
             status: 422,

@@ -6,4 +6,13 @@ const dataActivateCard = joi.object({
     password: joi.string().required().min(4)
 });
 
-export default dataActivateCard;
+const valueCard = joi.object({
+    id: joi.number().required(),
+    value: joi.number().required().min(0)
+})
+
+export {
+    dataActivateCard,
+    valueCard
+} 
+    
