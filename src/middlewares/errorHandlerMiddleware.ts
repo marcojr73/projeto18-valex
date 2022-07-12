@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import Joi from "joi";
 
 export default async function errorHandler(error, req: Request, res: Response, next: NextFunction){
     if(error.isJoi){
@@ -9,5 +8,5 @@ export default async function errorHandler(error, req: Request, res: Response, n
         return res.status(error.status).send(error.message)
     }
 
-    res.status(500).send("an internal error occurred")
+    res.status(404).send("an internal error occurred")
 }
