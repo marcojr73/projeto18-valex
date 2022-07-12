@@ -1,19 +1,41 @@
 import dotenv from "dotenv";
-import pg from "pg";
+import pg, {Pool, PoolConfig} from "pg";
+
 dotenv.config();
 
-const { Pool } = pg;
+let cachedDB: Pool;
+let connectionParams: PoolConfig = {
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: parseInt(process.env.DB_PORT),
+};
 
-const configDatabase = {
-  connectionString:process.env.DATABASE_URL,
-  ssl:{}
-}
-if(process.env.MODE = "PROD"){
-  configDatabase.ssl={
-    rejectUnauthorized:false,
+export async function connectDB(): Promise<Pool> {
+  if (cachedDB) {
+    return cachedDB;
   }
+
+  if (process.env.DATABASE_URL) {
+    connectionParams = {
+      connectionString: process.env.DATABASE_URL,
+    };
+  }
+
+  if (process.env.MODE === "PROD") {
+    connectionParams.ssl = {
+      rejectUnauthorized: false,
+    };
+  }
+
+  const { Pool } = pg;
+
+  const db = new Pool(connectionParams);
+  await db.connect();
+
+  cachedDB = db;
+
+  return db;
 }
 
-export const connection = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});

@@ -1,4 +1,4 @@
-import { connection } from "../config/database.js";
+import { connectDB } from "../config/database.js"
 
 export interface Employee {
   id: number;
@@ -9,7 +9,9 @@ export interface Employee {
 }
 
 export async function findById(id: number) {
-  const result = await connection.query<Employee, [number]>(
+  const db = await connectDB()
+
+  const result = await db.query<Employee, [number]>(
     "SELECT * FROM employees WHERE id=$1",
     [id]
   );
