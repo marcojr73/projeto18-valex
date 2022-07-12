@@ -115,7 +115,7 @@ export async function update(id: number, passCrypt: string) {
   );
 }
 
-export async function block(id, aux) {
+export async function block(id: number, aux: boolean) {
   connection.query(
     `UPDATE cards
     SET 

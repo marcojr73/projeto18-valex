@@ -1,9 +1,7 @@
 import * as schemas from "../schemas/schemas.js"
-import Joi, { isError } from "joi";
 
 async function validateType(typeCard){
-    const ans = typeCard === 'groceries' || typeCard === 'restaurant'||
-                typeCard === 'transport'|| typeCard === 'education'|| typeCard === 'health'
+    const ans = ["groceries", "restaurant", "transport", "education", "health"].includes(typeCard)
 
     if(!ans) throw {
         status: 400,
@@ -19,13 +17,28 @@ async function validateValue(id: number, value: number){
     await schemas.valueCard.validateAsync({id, value})
 }
 
-async function validateDataPurchase(cardId, password, businessId, amount){
+async function validateDataPurchase(cardId: number, password: string, businessId: number, amount: number){
     await schemas.dataPurchase.validateAsync({cardId, password, businessId, amount})
+}
+
+function validateTypeTransaction(number: string, cardholder: string, expirationDate: string, cvc: string, cardId: number, password: string){
+    if(number && cardholder && expirationDate && cvc) return "online"
+    if(cardId && password) return "pos"
+    throw {
+        status: 422,
+        message: "you not send correct data"
+    }
+}
+
+async function validateDataPurchaseOnline(number: string, cardholder: string, expirationDate: string, cvc: string){
+    await schemas.dataPurchaseOnline.validateAsync({number, cardholder, expirationDate, cvc})
 }
 
 export {
     validateType,
     validateDataCard,
     validateValue,
-    validateDataPurchase
+    validateDataPurchase,
+    validateDataPurchaseOnline,
+    validateTypeTransaction
 }

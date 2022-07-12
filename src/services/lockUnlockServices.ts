@@ -1,7 +1,7 @@
 import Cryptr from "cryptr"
 import * as repositoriesCard from "../repositories/cardRepository.js"
 
-function validatePass(passCrypt, password){
+function validatePass(passCrypt:string, password: string){
     const cryptr = new Cryptr('myTotallySecretKey')
     const ans = cryptr.decrypt(passCrypt)
     if(ans != password) {
@@ -12,8 +12,8 @@ function validatePass(passCrypt, password){
     }
 }
 
-function validateBlocked(card, aux){
-    let message = "this card is already unlocked"
+function validateBlocked(card, aux: boolean){
+    let message: string = "this card is already unlocked"
     if(aux){
         message = "this card is already blocked"
     }
@@ -25,7 +25,7 @@ function validateBlocked(card, aux){
     }
 }
 
-async function blockCard(id, aux){
+async function blockCard(id: number, aux: boolean){
     await repositoriesCard.block(id, aux)
 }
 

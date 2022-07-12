@@ -30,7 +30,7 @@ function validateCardExpiration(expiration){
     }
 }
 
-function validateStatus(ans, aux){
+function validateStatus(ans, aux: boolean){
     if(aux) {
         if(ans.password === null || ans.isBlocked){
             throw {

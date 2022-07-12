@@ -11,17 +11,34 @@ import * as utils from "../utils/utils.js"
 
 async function purchase(req: Request, res: Response){
     const {cardId, password, businessId, amount}: {cardId: number, password: string, businessId: number, amount: number} = req.body
+    const {number, cardholder, expirationDate, cvc}: {number: string, cardholder: string, expirationDate: string, cvc: string, } = req.body
+    
+    let card
+    const type = cardMiddleware.validateTypeTransaction(number, cardholder, expirationDate, cvc, cardId, password)
     const aux: boolean = true
+    
 
-    await cardMiddleware.validateDataPurchase(cardId, password, businessId, amount)
-    const card = await utils.verifyCard(cardId)
+    if(type === "online") {
+        await cardMiddleware.validateDataPurchaseOnline(number, cardholder, expirationDate, cvc)
+        card = await servicesPurchases.getCardOnline(number, cardholder, expirationDate)
+        console.log(card)
+        servicesPurchases.validateCorrectDataSend(number,cardholder, expirationDate, cvc, card)
+        servicesActivate.validateCvc(card.securityCode, cvc)
+    }
+    if(type === "pos") {
+        await cardMiddleware.validateDataPurchase(cardId, password, businessId, amount)
+        card = await utils.verifyCard(cardId)
+        servicesBlock.validatePass(card.password, password)
+    }
+    
     await utils.validateStatus(card, aux)
     utils.validateCardExpiration(card.expirationDate)
-    servicesBlock.validatePass(card.password, password)
+    
+
     await servicesPurchases.validateBusiness(card.type, businessId)
-    const balance = await servicesBalance.findCards(cardId)
+    const balance = await servicesBalance.findCards(card.id)
     await servicesPurchases.validateValue(balance.balance, amount)
-    await servicesPurchases.insertPurchase(cardId, businessId, amount)
+    await servicesPurchases.insertPurchase(card.id, businessId, amount)
 
     res.status(200).send("Purchase registered sucessfull")
 }

@@ -1,19 +1,9 @@
 import { faker } from '@faker-js/faker';
 import Cryptr from 'cryptr';
-
-// import * as companyRepository from "../repositories/companyRepository.js"
-import * as employeeRepository from "../repositories/employeeRepository.js"
-import * as cardRepository from "../repositories/cardRepository.js"
 import dayjs from 'dayjs';
 
-// async function validateKey(keyCompany){
-//     const ans = await companyRepository.findByApiKey(keyCompany)
-
-//     if(!ans) throw {
-//         status: 422,
-//         message: "this key is not register"
-//     }
-// }
+import * as employeeRepository from "../repositories/employeeRepository.js"
+import * as cardRepository from "../repositories/cardRepository.js"
 
 async function validateEmployee(employeeId){
     const ans =  await employeeRepository.findById(employeeId)
@@ -65,10 +55,10 @@ async function generateSecurityCode(){
 }
 
 async function insertCardData(employeeId, number, cardholderName, securityCode, expirationDate, type){
-    const password =  null
-    const isVirtual = false
-    const isBlocked = true
-    const originalCardId = null
+    const password: null =  null
+    const isVirtual: boolean = false
+    const isBlocked: boolean = true
+    const originalCardId: null = null
     const cardData = {
         employeeId,
         number,
@@ -89,7 +79,6 @@ async function insertCardData(employeeId, number, cardholderName, securityCode, 
 }
 
 export {
-    // validateKey,
     validateEmployee,
     validateUniqueCard,
     generateNumberCard,
@@ -98,4 +87,3 @@ export {
     generateSecurityCode,
     insertCardData
 }
-// 891

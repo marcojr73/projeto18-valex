@@ -3,11 +3,11 @@ import { activate, balance, block, card, create, unlock } from "../controllers/c
 
 const cardRouter = Router()
 
-cardRouter.post("/create", create)
-cardRouter.post("/activate", activate)
+cardRouter.post("/card/create", create)
+cardRouter.post("/card/activate", activate)
 cardRouter.get("/card", card)
-cardRouter.get("/balance/:id", balance)
-cardRouter.put("/block", block)
-cardRouter.put("/unlock", unlock)
+cardRouter.get("/card/balance/:id", balance)
+cardRouter.put("/card/block", block)
+cardRouter.put("/card/unlock", unlock)
 
 export default cardRouter

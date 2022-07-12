@@ -29,12 +29,12 @@ async function create(req: Request, res: Response){
 
 async function activate(req: Request, res: Response){
     const {id, cvc, password}: {id:number, cvc: string, password: string}  = req.body
-    const aux = false
+    const aux: boolean = false
     
-    const validateData = await middlewares.validateDataCard(id, cvc, password)
+    await middlewares.validateDataCard(id, cvc, password)
     const card = await utils.verifyCard(id)
     utils.validateCardExpiration(card.expirationDate)
-    const securityCode = await utils.validateStatus(card, aux)
+    const securityCode: string = await utils.validateStatus(card, aux)
     servicesActivate.validateCvc(securityCode, cvc)
     const passCrypt = servicesActivate.encryptPassword(password)
     await servicesActivate.insertData(id, passCrypt)
@@ -44,8 +44,8 @@ async function activate(req: Request, res: Response){
 }
 
 async function card(req: Request, res: Response){
-    const {cardId, employeeId} = req.body
-    const aux = true
+    const {cardId, employeeId}: {cardId: number, employeeId: number} = req.body
+    const aux: boolean = true
 
     const card = await utils.verifyCard(cardId)
     await utils.validateStatus(card, aux)
@@ -65,7 +65,7 @@ async function balance(req: Request, res: Response){
 
 async function block(req: Request, res: Response){
     const {id, password}: {id: number, password: string} = req.body
-    const aux = true
+    const aux: boolean = true
     
     const card = await utils.verifyCard(id)
     servicesLockUnlock.validateBlocked(card, aux)
@@ -78,7 +78,7 @@ async function block(req: Request, res: Response){
 
 async function unlock(req: Request, res: Response){
     const {id, password}: {id: number, password: string} = req.body
-    const aux = false
+    const aux: boolean = false
 
     const card = await utils.verifyCard(id)
     servicesLockUnlock.validateBlocked(card, aux)

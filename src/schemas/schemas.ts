@@ -18,9 +18,17 @@ const dataPurchase = joi.object({
     amount: joi.number().min(1).required()
 })
 
+const dataPurchaseOnline = joi.object({
+    number: joi.string().required(), 
+    cardholder: joi.string().required(),
+    expirationDate: joi.string().required(),
+    cvc: joi.string().min(3).max(3).required()
+})
+
 export {
     dataActivateCard,
     valueCard,
-    dataPurchase
+    dataPurchase,
+    dataPurchaseOnline
 } 
     
