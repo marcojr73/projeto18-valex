@@ -17,7 +17,12 @@ async function validateValue(balance: number, amount: number){
     }
 }
 
+async function insertPurchase(cardId: number, businessId: number, amount: number){
+    await repositoriesPayments.insert({cardId, businessId, amount})
+}
+
 export {
     validateBusiness,
-    validateValue
+    validateValue,
+    insertPurchase
 }

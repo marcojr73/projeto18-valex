@@ -1,3 +1,5 @@
+import Cryptr from "cryptr"
+
 import * as repositoriesPayments from "../repositories/paymentRepository.js"
 import * as repositoriesRecharge from "../repositories/rechargeRepository.js"
 
@@ -26,6 +28,18 @@ function calculateBalace(transactions, recharges){
     return amount
 }
 
+async function getDataCard(card){
+    const cryptr = new Cryptr('myTotallySecretKey')
+    const ans = cryptr.decrypt(card.securityCode)
+    return {
+        number: card.number,
+        cardholderName: card.cardholderName,
+        expirationDate: card.expirationDate,
+        CVC: ans
+    }
+}
+
 export {
-    findCards
+    findCards,
+    getDataCard
 }

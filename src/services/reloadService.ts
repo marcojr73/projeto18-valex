@@ -5,5 +5,5 @@ async function reloadCard(cardId: number, amount: number){
 }
 
 export {
-    reloadCard
+    reloadCard,
 }

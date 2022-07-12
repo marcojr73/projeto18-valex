@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
 
-import * as middlewares from "../middlewares/cardMiddleware.js"
+import * as middlewares from "../middlewares/validationMiddlewares.js"
 import * as servicesCreate from "../services/createCardServices.js"
 import * as servicesActivate from "../services/activateCardServices.js"
 import * as servicesBalance from "../services/balanceCardService.js"
 import * as servicesLockUnlock from "../services/lockUnlockServices.js"
+
+import * as utils from "../utils/utils.js"
 
 async function create(req: Request, res: Response){
 
@@ -12,7 +14,7 @@ async function create(req: Request, res: Response){
     const {employeeId, type}: {employeeId: Number, type: String} = req.body
     
     await middlewares.validateType(type)
-    await servicesCreate.validateKey(apiKey)
+    await utils.validateKey(apiKey)
     const fullName = await servicesCreate.validateEmployee(employeeId)
     await servicesCreate.validateUniqueCard(type, employeeId)
     const number = await servicesCreate.generateNumberCard()
@@ -30,9 +32,9 @@ async function activate(req: Request, res: Response){
     const aux = false
     
     const validateData = await middlewares.validateDataCard(id, cvc, password)
-    const card = await servicesActivate.verifyCard(id)
-    servicesActivate.validateCardExpiration(card.expirationDate)
-    const securityCode = await servicesActivate.validateStatus(card, aux)
+    const card = await utils.verifyCard(id)
+    utils.validateCardExpiration(card.expirationDate)
+    const securityCode = await utils.validateStatus(card, aux)
     servicesActivate.validateCvc(securityCode, cvc)
     const passCrypt = servicesActivate.encryptPassword(password)
     await servicesActivate.insertData(id, passCrypt)
@@ -42,16 +44,20 @@ async function activate(req: Request, res: Response){
 }
 
 async function card(req: Request, res: Response){
-// devo receber o identificador do funcionário e a senha do cartão
-// devo validar se o cartão existe
-// devo validar se o cartão esta ativado
-// devo validar se a senha esta correta 
+    const {cardId, employeeId} = req.body
+    const aux = true
+
+    const card = await utils.verifyCard(cardId)
+    await utils.validateStatus(card, aux)
+    const ans = await servicesBalance.getDataCard(card)
+    
+    res.status(200).send(ans)
 }
 
 async function balance(req: Request, res: Response){
     const {id} = (req.params)
     
-    await servicesActivate.verifyCard(id)
+    await utils.verifyCard(id)
     const balance = await servicesBalance.findCards(id)
     
     res.status(200).send(balance)
@@ -61,8 +67,9 @@ async function block(req: Request, res: Response){
     const {id, password}: {id: number, password: string} = req.body
     const aux = true
     
-    const card = await servicesActivate.verifyCard(id)
+    const card = await utils.verifyCard(id)
     servicesLockUnlock.validateBlocked(card, aux)
+    utils.validateCardExpiration(card.expirationDate)
     servicesLockUnlock.validatePass(card.password, password)
     await servicesLockUnlock.blockCard(id, aux)
 
@@ -73,8 +80,9 @@ async function unlock(req: Request, res: Response){
     const {id, password}: {id: number, password: string} = req.body
     const aux = false
 
-    const card = await servicesActivate.verifyCard(id)
+    const card = await utils.verifyCard(id)
     servicesLockUnlock.validateBlocked(card, aux)
+    utils.validateCardExpiration(card.expirationDate)
     servicesLockUnlock.validatePass(card.password, password)
     await servicesLockUnlock.blockCard(id, aux)
 
