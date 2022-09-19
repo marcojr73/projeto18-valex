@@ -5,7 +5,7 @@ const cardRouter = Router()
 
 cardRouter.post("/card/create", create)
 cardRouter.post("/card/activate", activate)
-cardRouter.get("/card", card)
+cardRouter.get("/card/:cardId", card)
 cardRouter.get("/card/balance/:id", balance)
 cardRouter.put("/card/block", block)
 cardRouter.put("/card/unlock", unlock)

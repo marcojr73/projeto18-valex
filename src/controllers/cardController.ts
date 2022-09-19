@@ -44,9 +44,8 @@ async function activate(req: Request, res: Response){
 }
 
 async function card(req: Request, res: Response){
-    const {cardId, employeeId}: {cardId: number, employeeId: number} = req.body
+    const cardId: Number = +req.params.cardId
     const aux: boolean = true
-
     const card = await utils.verifyCard(cardId)
     await utils.validateStatus(card, aux)
     const ans = await servicesBalance.getDataCard(card)
