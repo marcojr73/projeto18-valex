@@ -32,7 +32,7 @@ Instale meu projeto, crie um banco de dados com os comandos SQL na pasta databas
 
 - Node.js
 - Express
-- Typescrip
+- Typescript
 - Criptografia de senhas
 - Validação por token
 - Joi
